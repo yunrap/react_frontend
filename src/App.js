@@ -1,42 +1,19 @@
-import "./App.css";
-import Home from "./home.js";
-import Test from "./pages/test.js";
+import React, { Component } from "react";
+import Home from "./pages/Home";
 import { Route, Routes } from "react-router-dom";
-import { useEffect } from "react";
-import LoginPage from "./pages/LoginPage";
+import DocumentPage from "./pages/DocumentPage";
 
-function App() {
-  useEffect(() => {
-    fetch("/test").then((res) => res.text());
-  }, []);
-
-  // useEffect(() => {
-  //   fetch("/login", {
-  //     method: "post",
-  //     headers: {
-  //       "content-type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       userName: "홍길동",
-  //       pwd: "1234",
-  //     }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((token) => {
-  //       localStorage.setItem("jwt", token.accessToken);
-  //       alert("로그인 되었습니다");
-  //     });
-  // }, []);
-
-  return (
-    <div className="App">
-      <Routes>
-        <Route path="/" component={Home} />
-        <Route path="/test" component={Test} />
-        <Route path="/loginPage" element={<LoginPage />} />
-      </Routes>
-    </div>
-  );
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <Routes>
+          <Route path="" element={<Home />} />
+          <Route path="/documentPage" element={<DocumentPage />} />
+        </Routes>
+      </div>
+    );
+  }
 }
 
 export default App;
