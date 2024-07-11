@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+type InboxProps = {
+  idx: number;
+  documentNumber: number;
+  title: string;
+  content: string;
+  userId: string;
+  completeYn: string;
+};
+
 const DocumentPage = () => {
-  const [inboxList, setInboxList] = useState([]);
+  const [inboxList, setInboxList] = useState<InboxProps[]>();
+  const [outboxList, setOutBoxList] = useState([]);
 
   const getInboxList = async () => {
     const params = { userId: "ghost01", take: 10, skip: 0 };
@@ -19,14 +29,14 @@ const DocumentPage = () => {
 
   return (
     <>
-      <div class="title">나의 문서 목록</div>
-      <div class="container">
-        <div class="container">
-          <div class="table-container">
+      <div className="title">나의 문서 목록</div>
+      <div className="container">
+        <div className="container">
+          <div className="table-container">
             <table>
               <thead>
                 <tr>
-                  <th colspan="5">INBOX - 내가 결제해야할 문서</th>
+                  <th colSpan={5}>INBOX - 내가 결제해야할 문서</th>
                 </tr>
                 <tr>
                   <th>번호</th>
@@ -37,25 +47,29 @@ const DocumentPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {inboxList.map((data) => (
-                  <>
-                    <tr key={data.idx}>
-                      <td>{data.documentNumber}</td>
-                      <td>{data.title}</td>
-                      <td>{data.content}</td>
-                      <td>{data.userId}</td>
-                      <td>{data.completeYn}</td>
-                    </tr>
-                  </>
-                ))}
+                {inboxList !== undefined ? (
+                  inboxList.map((data: InboxProps) => (
+                    <>
+                      <tr key={data.idx}>
+                        <td>{data.documentNumber}</td>
+                        <td>{data.title}</td>
+                        <td>{data.content}</td>
+                        <td>{data.userId}</td>
+                        <td>{data.completeYn}</td>
+                      </tr>
+                    </>
+                  ))
+                ) : (
+                  <>null</>
+                )}
               </tbody>
             </table>
           </div>
-          <div class="table-container">
+          <div className="table-container">
             <table>
               <thead>
                 <tr>
-                  <th colspan="5">OUTBOX - 내가 생성한 문서(결제진행중)</th>
+                  <th colSpan={5}>OUTBOX - 내가 생성한 문서(결제진행중)</th>
                 </tr>
                 <tr>
                   <th>번호</th>
@@ -83,11 +97,11 @@ const DocumentPage = () => {
               </tbody>
             </table>
           </div>
-          <div class="table-container">
+          <div className="table-container">
             <table>
               <thead>
                 <tr>
-                  <th colspan="5">ARCHIVE - 내가 관여한문서(완료)</th>
+                  <th colSpan={5}>ARCHIVE - 내가 관여한문서(완료)</th>
                 </tr>
               </thead>
               <tbody>
