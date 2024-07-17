@@ -1,12 +1,13 @@
-import { InboxProps } from "./TableDataType";
-import { headersType } from "./TableType";
+import { InboxProps } from "../../types/TableDataType";
+import { headersType } from "../../types/TableType";
 
 type headersProps = {
   headers: headersType[];
   items?: InboxProps[];
+  handleDetail?: (id: string) => void;
 };
 
-const DataTable = ({ headers, items }: headersProps) => {
+const DataTable = ({ headers, items, handleDetail }: headersProps) => {
   if (!headers || !headers.length) {
     throw new Error("<DataTable /> headers is required.");
   }
@@ -25,7 +26,12 @@ const DataTable = ({ headers, items }: headersProps) => {
       <tbody>
         {items !== undefined ? (
           items.map((item, index) => (
-            <tr key={index}>
+            <tr
+              key={index}
+              onClick={() => {
+                if (handleDetail) handleDetail(item.documentNumber);
+              }}
+            >
               {/* headerKey를 순회하면서 key를 가져옴 */}
               {headerKey.map((key) => (
                 <td key={key + index}>{item[key]}</td>
