@@ -7,37 +7,51 @@ import { useNavigate } from "react-router-dom";
 
 const DocumentPage = () => {
   const navigate = useNavigate();
-  const [inboxList, setInboxList] = useState<InboxProps[]>();
-  const [outboxList, setOutBoxList] = useState([]);
-  const [approvalDt, setApprovalDt] = useState<ApprovalDetailProps[]>();
-  const [id, setId] = useState(0);
+  const [boxList, setBoxList] = useState({
+    inboxList: [],
+    archiveList: [],
+    outboxList: [],
+  });
 
   useEffect(() => {
-    getInboxList();
+    axios.all([getInboxList(), getArchiveList(), getOutboxList()]).then(
+      axios.spread((res1, res2, res3) => {
+        setBoxList({
+          inboxList: res1.data.data,
+          archiveList: res2.data.data,
+          outboxList: res3.data.data,
+        });
+      })
+    );
   }, []);
 
-  // 내가 결제를 해야할 Document조회
-  const getInboxList = async () => {
-    const params = { userId: "ghost01", take: 10, skip: 0 };
+  const getInboxList = () => {
+    return axios.get("/api/document/inbox", {
+      params: { userId: "ghost01", take: 10, skip: 0 },
+    });
+  };
 
-    const resp = await (
-      await axios.get(`/api/document/archive`, { params })
-    ).data;
-    setInboxList(resp.data);
+  const getOutboxList = () => {
+    return axios.get("/api/document/outbox", {
+      params: { userId: "ghost01", take: 10, skip: 0 },
+    });
+  };
+  const getArchiveList = () => {
+    return axios.get("/api/document/archive", {
+      params: { userId: "ghost01", take: 10, skip: 0 },
+    });
   };
 
   // 문서상세조회
-  const handleDetail = useCallback(
-    async (id: string) => {
-      const params = { documentNumber: id };
-      const resp = await (
-        await axios.get(`/api/approval/detail`, { params })
-      ).data;
+  const handleDetail = async (id: string) => {
+    console.log(id);
+    const params = { documentNumber: id };
+    const resp = await (
+      await axios.get(`/api/approval/detail`, { params })
+    ).data;
 
-      navigate(`${id}`, { state: { resp } });
-    },
-    [id]
-  );
+    navigate(`${id}`, { state: { resp } });
+  };
 
   const headers = [
     {
@@ -70,17 +84,25 @@ const DocumentPage = () => {
           INBOX - 내가 결제해야할 문서
           <DataTable
             headers={headers}
-            items={inboxList}
+            items={boxList.inboxList}
             handleDetail={handleDetail}
           ></DataTable>
         </div>
         <div className="table-container">
           ARCHIVE - 내가 관여한문서(완료)
-          <DataTable headers={headers} items={inboxList}></DataTable>
+          <DataTable
+            headers={headers}
+            items={boxList.archiveList}
+            handleDetail={handleDetail}
+          ></DataTable>
         </div>
         <div className="table-container">
           OUTBOX - 내가 생성한 문서(결제진행중)
-          <DataTable headers={headers} items={inboxList}></DataTable>
+          <DataTable
+            headers={headers}
+            items={boxList.outboxList}
+            handleDetail={handleDetail}
+          ></DataTable>
         </div>
       </div>
     </>

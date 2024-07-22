@@ -27,7 +27,7 @@ const DataTable = ({ headers, items, handleDetail }: headersProps) => {
         {items !== undefined ? (
           items.map((item, index) => (
             <tr
-              key={index}
+              key={index + "ddd"}
               onClick={() => {
                 if (handleDetail) handleDetail(item.documentNumber);
               }}
@@ -39,7 +39,9 @@ const DataTable = ({ headers, items, handleDetail }: headersProps) => {
             </tr>
           ))
         ) : (
-          <>null</>
+          <>
+            <tr>{"데이터가없습니다."}</tr>
+          </>
         )}
       </tbody>
     </table>
