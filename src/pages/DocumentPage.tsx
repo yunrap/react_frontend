@@ -81,7 +81,7 @@ const DocumentPage = () => {
       <div className="title">나의 문서 목록</div>
       <div className="container">
         <div className="table-container">
-          INBOX - 내가 결제해야할 문서
+          <div className="table-title">INBOX - 내가 결제해야할 문서</div>
           <DataTable
             headers={headers}
             items={boxList.inboxList}
@@ -89,7 +89,7 @@ const DocumentPage = () => {
           ></DataTable>
         </div>
         <div className="table-container">
-          ARCHIVE - 내가 관여한문서(완료)
+          <div className="table-title">ARCHIVE - 내가 관여한문서(완료)</div>
           <DataTable
             headers={headers}
             items={boxList.archiveList}
@@ -97,7 +97,7 @@ const DocumentPage = () => {
           ></DataTable>
         </div>
         <div className="table-container">
-          OUTBOX - 내가 생성한 문서(결제진행중)
+          <div className="table-title">OUTBOX - 내가 생성한 문서(결제진행중)</div>
           <DataTable
             headers={headers}
             items={boxList.outboxList}
